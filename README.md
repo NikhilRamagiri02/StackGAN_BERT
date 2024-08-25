@@ -1,95 +1,102 @@
-# StackGAN
+StackGAN-BERT: Text-to-Image Generation using StackGAN and BERT
+Overview
 
-- PyTorch implementation of the paper [StackGAN: Text to Photo-realistic Image Synthesis with Stacked Generative Adversarial Networks](https://arxiv.org/pdf/1612.03242.pdf) by Han Zhang, Tao Xu, Hongsheng Li, Shaoting Zhang, Xiaogang Wang,   Xiaolei Huang, Dimitris Metaxas.
+This project implements a text-to-image generation system that combines the power of Stacked Generative Adversarial Networks (StackGAN) with BERT embeddings. The system takes a text description as input and generates high-resolution images that match the description. This implementation is particularly focused on generating images of birds, leveraging the CUB-200-2011 dataset for training and evaluation.
+Features
 
-## :bulb: What's new?
-- We use BERT embeddings for the text description instead of the char-CNN-RNN text embeddings that were used in the paper implementation.
-<img src="examples/framework.jpg" width="850px" height="370px"/>
+    Text-to-Image Generation: Generate photo-realistic images based on textual descriptions using a two-stage StackGAN architecture.
+    BERT Embeddings: Utilize BERT embeddings to capture the contextual meaning of input text, leading to more accurate image generation.
+    High-Resolution Images: The system generates images in two stages, with the second stage refining the image to a high resolution.
+    Customizable Inputs: Users can input detailed descriptions to customize the generated images.
 
-## Pretrained model
-- [Stage 1](https://drive.google.com/drive/folders/14AyNcu7oZJe2aMevynAbYIpMKN7I3yHT?usp=sharing) trained using BERT embeddings instead of the orignal char-CNN-RNN text embeddings
-- [Stage 2](https://drive.google.com/drive/folders/1Pyndsp9oraE15ssD4MZJBVsyLW1ECCIi?usp=sharing) trained using BERT embeddings instead of the orignal char-CNN-RNN text embeddings
+Project Structure
 
-## Paper examples
-#### :bird: Examples for birds (char-CNN-RNN embeddings), more on [youtube](https://youtu.be/93yaf_kE0Fg):
-![](examples/bird1.jpg) <br>
-![](examples/bird2.jpg) <br>
-![](examples/bird4.jpg) <br>
-![](examples/bird3.jpg) <br>
+    data/: Contains datasets used for training and testing.
+        CUB_200_2011/: Bird dataset used for training.
+        embeddings/: Folder containing BERT-generated text embeddings.
+    models/: Contains the implementation of the StackGAN model, including the generator, discriminator, and conditional augmentation modules.
+    scripts/: Utility scripts for training, testing, and image generation.
+    bert_emb.py: Script for generating BERT embeddings from textual descriptions.
+    train.py: Script for training the StackGAN model.
+    generate.py: Script for generating images based on text inputs.
+    config.py: Configuration file containing model hyperparameters and paths.
+    app/: Contains the code for the web interface (React frontend and Flask/Streamlit backend).
 
---------------------------------------------------------------------------------------------
+Installation
 
-#### :sunflower: Examples for flowers (char-CNN-RNN embeddings), more on [youtube](https://youtu.be/SuRyL5vhCIM):
-![](examples/flower1.jpg) <br>
-![](examples/flower2.jpg) <br>
-![](examples/flower3.jpg) <br>
-![](examples/flower4.jpg) <br>
+    Clone the Repository:
 
---------------------------------------------------------------------------------------------
+    bash
 
-## :clipboard: Dependencies
-```bash
-git clone https://github.com/sahilkhose/StackGAN-BERT.git
-pip3 install -r requirements.txt
-```
+git clone https://github.com/yourusername/StackGAN-BERT.git
+cd StackGAN-BERT
 
-## Dataset
-Check instructions in `/input/README.md`
-```bash
-cd input/src
-python3 data.py
-```
+Set Up the Environment:
 
-## Generating BERT embeddings of annotations
-Change the DEVICE to `cpu` in `input/src/config.py` if `cuda` is not available
-```bash
-python3 bert_emb.py  
-```
+    Create a virtual environment using Anaconda:
 
-## :wrench: Training
-```bash
-cd ../../src
-```
-Option 1: CLI args training `src/args.py`
-```bash
-python3 train.py --TRAIN_MAX_EPOCH 10 
-```
-Option 2: yaml args training `cfg/s1.yml` and `cfg/s2.yml`
-```bash
-python3 train.py --conf ../cfg/s1.yml
+    bash
 
-mkdir ../old_outputs
-mv ../output ../old_outputs/output_stage-1
+conda create --name stackgan-bert python=3.9
+conda activate stackgan-bert
 
-python3 train.py --conf ../cfg/s2.yml
+Install the required dependencies:
 
-mv ../output ../old_outputs/output_stage-2
-```
-To load the tensorboard
-```bash
-tensorboard --logdir=../output 
-```
+bash
 
---------------------------------------------------------------------------------------------
+    pip install -r requirements.txt
 
-## :books: Citing StackGAN
-If you find StackGAN useful in your research, please consider citing:
+Download the Dataset:
 
-```
-@inproceedings{han2017stackgan,
-Author = {Han Zhang and Tao Xu and Hongsheng Li and Shaoting Zhang and Xiaogang Wang and Xiaolei Huang and Dimitris Metaxas},
-Title = {StackGAN: Text to Photo-realistic Image Synthesis with Stacked Generative Adversarial Networks},
-Year = {2017},
-booktitle = {{ICCV}},
-}
-```
+    Download the CUB-200-2011 dataset and place it in the data/ folder.
 
-**Follow-up work**
+Generate BERT Embeddings:
 
-- [StackGAN++: Realistic Image Synthesis with Stacked Generative Adversarial Networks](https://arxiv.org/abs/1710.10916)
-- [AttnGAN: Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks](https://arxiv.org/abs/1711.10485) [[supplementary]](https://1drv.ms/b/s!Aj4exx_cRA4ghK5-kUG-EqH7hgknUA) [[code]](https://github.com/taoxugit/AttnGAN)
+    Run the script to generate BERT embeddings for the dataset:
 
-**References**
+    bash
 
-- Generative Adversarial Text-to-Image Synthesis [Paper](https://arxiv.org/abs/1605.05396) [Code](https://github.com/reedscot/icml2016)
-- Learning Deep Representations of Fine-grained Visual Descriptions [Paper](https://arxiv.org/abs/1605.05395) [Code](https://github.com/reedscot/cvpr2016)
+        python scripts/bert_emb.py
+
+Usage
+Training the Model
+
+To train the StackGAN model with BERT embeddings:
+
+bash
+
+python train.py --config config.py
+
+Generating Images
+
+To generate images based on custom text input:
+
+bash
+
+python generate.py --text "A small bird with blue feathers."
+
+Web Interface
+
+To run the web interface for interactive text-to-image generation:
+
+    Run the Backend:
+        If using Flask:
+
+        bash
+
+cd app/server
+python app.py
+
+If using Streamlit:
+
+bash
+
+    streamlit run app.py
+
+Run the React Frontend:
+
+bash
+
+cd app/client
+npm install
+npm start
