@@ -1,9 +1,4 @@
-"""Train and Eval functions
 
-Authors:
-    Abhiraj Tiwari (abhirajtiwari@gmail.com)
-    Sahil Khose (sahilkhose18@gmail.com)
-"""
 import util
 
 import torch
