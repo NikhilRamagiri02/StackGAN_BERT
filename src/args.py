@@ -1,9 +1,4 @@
-"""Command-line arguments.
 
-Authors:
-    Abhiraj Tiwari (abhirajtiwari@gmail.com)
-    Sahil Khose (sahilkhose18@gmail.com)
-"""
 # >  python3 args.py --conf ../cfg/s1.yml
 import argparse
 import yaml
